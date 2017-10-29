@@ -51,7 +51,7 @@ def iterate(pixels):
     colorRGB = webcolors.name_to_rgb('red')
     color = Adafruit_WS2801.RGB_to_color(colorRGB[0], colorRGB[1], colorRGB[2])
 
-    for i in range(0, pixels.count()-1):
+    for i in range(1, pixels.count()):
         pixels.clear()
         pixels.show()
         pixels.set_pixel(i, color)
