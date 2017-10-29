@@ -52,7 +52,10 @@ def iterate(pixels):
     color = Adafruit_WS2801.RGB_to_color(colorRGB[0], colorRGB[1], colorRGB[2])
 
     for i in range(0, pixels.count()-1):
+        pixels.clear()
+        pixels.show()
         pixels.set_pixel(i, color)
+        pixels.show()
         time.sleep(2)
 
 
