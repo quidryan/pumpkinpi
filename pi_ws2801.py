@@ -9,6 +9,16 @@ import Adafruit_GPIO.SPI as SPI
 
 import os
 from time import sleep
+from time import strftime
+import RPi.GPIO as GPIO
+
+SENSOR_PORT = 18
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(SENSOR_PORT, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+sensor_current = False
+sensor_previous = False
 
 # Configure the count of pixels:
 PIXEL_COUNT = 9
@@ -115,7 +125,21 @@ if __name__ == "__main__":
     #flash_face(pixels, red, red, orange)
     #iterate(pixels)
     #flash_face(pixels, (255, 0, 0), (255, 0, 0), (0, 255, 255))
-    os.system('mpg123 -q HeyThereScram.mp3 &')
-    hey(0.05)
-    hey(0.1)
-    hey(0.2)
+
+    os.system('mpg123 -q Beep.mp3 &')
+
+    while True:
+        sensor_previous = sensor_current
+        sensor_current = GPIO.input(SENSOR_PORT)
+        print(strftime("%I:%M:%S") + " - GPIO pin %s is %s" % (SENSOR_PORT, sensor_current))
+        if (sensor_current == GPIO.HIGH and sensor_previous == GPIO.LOW):
+            # Start sequence
+            # os.system('mpg123 -q Beep.mp3 &')
+            os.system('mpg123 -q HeyThereScram.mp3 &')
+            hey(0.05)
+            hey(0.1)
+            hey(0.2)
+
+            flash_face(pixels, red, red, red)
+
+        sleep(0.5);
