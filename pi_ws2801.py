@@ -26,13 +26,23 @@ def flash_face(pixels, lefteye, righteye, mouth, blink_times=20):
         pixels.show()
         time.sleep(0.5)
 
-def face(pixels, lefteye, righteye, mouth):
-    pixels.set_pixel(0, Adafruit_WS2801.RGB_to_color(lefteye[0], lefteye[1], lefteye[2]))
-    pixels.set_pixel(1, Adafruit_WS2801.RGB_to_color(righteye[0], righteye[1], righteye[2]))
+def mouth(pixels, eyes, mouth):
+    eyecolor = Adafruit_WS2801.RGB_to_color(eyes[0], eyes[1], eyes[2])
+    pixels.set_pixel(pixels.count()-1, eyecolor)
+    pixels.set_pixel(pixels.count()-2, eyecolor)
 
     mouthcolor = Adafruit_WS2801.RGB_to_color(mouth[0], mouth[1], mouth[2])
-    for i in range(2, pixels.count()):
+    # Speak
+    
+    
+
+def face(pixels, lefteye, righteye, mouth):
+    mouthcolor = Adafruit_WS2801.RGB_to_color(mouth[0], mouth[1], mouth[2])
+    for i in range(0, pixels.count()-1):
         pixels.set_pixel(i, mouthcolor)
+    pixels.set_pixel(pixels.count()-1, Adafruit_WS2801.RGB_to_color(lefteye[0], lefteye[1], lefteye[2]))
+    pixels.set_pixel(pixels.count()-2, Adafruit_WS2801.RGB_to_color(righteye[0], righteye[1], righteye[2]))
+
 
     pixels.show()
  
@@ -41,7 +51,7 @@ if __name__ == "__main__":
     pixels.clear()
 
     red = webcolors.name_to_rgb('red')
-    blue = webcolors.name_to_rgb('blue')
+    orange = webcolors.name_to_rgb('orange')
 
-    flash_face(pixels, red, red, blue)
+    flash_face(pixels, red, red, orange)
     #flash_face(pixels, (255, 0, 0), (255, 0, 0), (0, 255, 255))

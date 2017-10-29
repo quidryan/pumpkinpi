@@ -6,7 +6,7 @@ from time import strftime
  
 import RPi.GPIO as GPIO
  
-SENSOR_PORT = 25
+SENSOR_PORT = 18 
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(SENSOR_PORT, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
