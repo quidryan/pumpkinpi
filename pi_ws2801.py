@@ -26,7 +26,7 @@ def flash_face(pixels, lefteye, righteye, mouth, blink_times=20):
         pixels.show()
         time.sleep(0.5)
 
-def mouth(pixels, eyes, mouth):
+def speak(pixels, eyes, mouth):
     eyecolor = Adafruit_WS2801.RGB_to_color(eyes[0], eyes[1], eyes[2])
     pixels.set_pixel(pixels.count()-1, eyecolor)
     pixels.set_pixel(pixels.count()-2, eyecolor)
@@ -34,18 +34,28 @@ def mouth(pixels, eyes, mouth):
     mouthcolor = Adafruit_WS2801.RGB_to_color(mouth[0], mouth[1], mouth[2])
     # Speak
     
-    
+def mouth_small(pixels, mouthcolor):
+    pixels.set_pixel(pixels.count() - 2, mouthcolor)
 
 def face(pixels, lefteye, righteye, mouth):
     mouthcolor = Adafruit_WS2801.RGB_to_color(mouth[0], mouth[1], mouth[2])
-    for i in range(0, pixels.count()-1):
+    for i in range(0, pixels.count()-2):
         pixels.set_pixel(i, mouthcolor)
     pixels.set_pixel(pixels.count()-1, Adafruit_WS2801.RGB_to_color(lefteye[0], lefteye[1], lefteye[2]))
     pixels.set_pixel(pixels.count()-2, Adafruit_WS2801.RGB_to_color(righteye[0], righteye[1], righteye[2]))
 
 
     pixels.show()
- 
+
+def iterate(pixels):
+    colorRGB = webcolors.name_to_rgb('red')
+    color = Adafruit_WS2801.RGB_to_color(colorRGB[0], colorRGB[1], colorRGB[2])
+
+    for i in range(0, pixels.count()-1):
+        pixels.set_pixel(i, color)
+        time.sleep(2)
+
+
 if __name__ == "__main__":
     # Clear all the pixels to turn them off.
     pixels.clear()
@@ -53,5 +63,6 @@ if __name__ == "__main__":
     red = webcolors.name_to_rgb('red')
     orange = webcolors.name_to_rgb('orange')
 
-    flash_face(pixels, red, red, orange)
+    #flash_face(pixels, red, red, orange)
+    iterate(pixels)
     #flash_face(pixels, (255, 0, 0), (255, 0, 0), (0, 255, 255))
