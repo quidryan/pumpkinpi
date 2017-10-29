@@ -7,6 +7,9 @@ import webcolors
 import Adafruit_WS2801
 import Adafruit_GPIO.SPI as SPI
 
+import os
+from time import sleep
+
 # Configure the count of pixels:
 PIXEL_COUNT = 9
  
@@ -34,38 +37,85 @@ def speak(pixels, eyes, mouth):
     mouthcolor = Adafruit_WS2801.RGB_to_color(mouth[0], mouth[1], mouth[2])
     # Speak
     
-def mouth_small(pixels, mouthcolor):
-    pixels.set_pixel(pixels.count() - 2, mouthcolor)
+def mouth_big(pixels, color):
+    lightup(pixels, color, [0, 1, 2, 3, 4, 5, 6, 7, 8])
 
+def mouth_normal(pixels, color):
+    lightup(pixels, color, [1, 2, 3, 4, 5, 7, 8])
+
+def mouth_small(pixels, color):
+    lightup(pixels, color, [2, 3, 4, 7, 8])
+
+def mouth_tiny(pixels, color):
+    lightup(pixels, color, [3, 7, 8])
+
+def mouth_none(pixels, color):
+    lightup(pixels, color, [7, 8])
+
+def lightup(pixels, mouthcolor, mouthpixels):
+    pixels.clear()
+    for i in mouthpixels:
+        pixels.set_pixel(i, mouthcolor)
+    pixels.show()
+        
 def face(pixels, lefteye, righteye, mouth):
     mouthcolor = Adafruit_WS2801.RGB_to_color(mouth[0], mouth[1], mouth[2])
     for i in range(0, pixels.count()-2):
         pixels.set_pixel(i, mouthcolor)
     pixels.set_pixel(pixels.count()-1, Adafruit_WS2801.RGB_to_color(lefteye[0], lefteye[1], lefteye[2]))
     pixels.set_pixel(pixels.count()-2, Adafruit_WS2801.RGB_to_color(righteye[0], righteye[1], righteye[2]))
-
-
     pixels.show()
 
 def iterate(pixels):
-    colorRGB = webcolors.name_to_rgb('red')
+    colorRGB = webcolors.name_to_rgb('orangered')
     color = Adafruit_WS2801.RGB_to_color(colorRGB[0], colorRGB[1], colorRGB[2])
 
-    for i in range(1, pixels.count()):
+    for i in range(0, pixels.count()):
         pixels.clear()
         pixels.show()
         pixels.set_pixel(i, color)
+        print("Showing ", i)
         pixels.show()
         time.sleep(2)
+    pixels.clear()
+    pixels.show()
 
+def hey(delay = 0.5):
+    mouth_none(pixels, orange)
+    time.sleep(delay)
+    mouth_tiny(pixels, orange)
+    time.sleep(delay * 0.9)
+    mouth_small(pixels, orange)
+    time.sleep(delay * 0.8)
+    mouth_normal(pixels, orange)
+    time.sleep(delay * 0.7)
+
+    mouth_big(pixels, orange)
+    time.sleep(delay * 0.6)
+
+    mouth_normal(pixels, orange)
+    time.sleep(delay * 0.7)
+    mouth_small(pixels, orange)
+    time.sleep(delay)
+    mouth_tiny(pixels, orange)
+    time.sleep(delay)
+    mouth_none(pixels, orange)
+    time.sleep(delay)
+
+orange = webcolors.name_to_rgb('orange')
 
 if __name__ == "__main__":
     # Clear all the pixels to turn them off.
     pixels.clear()
 
     red = webcolors.name_to_rgb('red')
-    orange = webcolors.name_to_rgb('orange')
+    orangeRGB = webcolors.name_to_rgb('orange')
+    orange = Adafruit_WS2801.RGB_to_color(orangeRGB[0], orangeRGB[1], orangeRGB[2])
 
     #flash_face(pixels, red, red, orange)
-    iterate(pixels)
+    #iterate(pixels)
     #flash_face(pixels, (255, 0, 0), (255, 0, 0), (0, 255, 255))
+    os.system('mpg123 -q HeyThereScram.mp3 &')
+    hey(0.05)
+    hey(0.1)
+    hey(0.2)
