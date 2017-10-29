@@ -114,6 +114,14 @@ def hey(delay = 0.5):
 
 orange = webcolors.name_to_rgb('orange')
 
+def scram():
+    os.system('mpg123 -q HeyThereScram.mp3 &')
+    hey(0.05)
+    hey(0.1)
+    hey(0.15)
+
+    flash_face(pixels, red, red, red, 5)
+
 if __name__ == "__main__":
     # Clear all the pixels to turn them off.
     pixels.clear()
@@ -133,13 +141,6 @@ if __name__ == "__main__":
         sensor_current = GPIO.input(SENSOR_PORT)
         print(strftime("%I:%M:%S") + " - GPIO pin %s is %s" % (SENSOR_PORT, sensor_current))
         if (sensor_current == GPIO.HIGH and sensor_previous == GPIO.LOW):
-            # Start sequence
-            # os.system('mpg123 -q Beep.mp3 &')
-            os.system('mpg123 -q HeyThereScram.mp3 &')
-            hey(0.05)
-            hey(0.1)
-            hey(0.2)
-
-            flash_face(pixels, red, red, red)
+            scram()
 
         sleep(0.5);
