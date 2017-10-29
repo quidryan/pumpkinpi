@@ -139,7 +139,7 @@ if __name__ == "__main__":
     while True:
         sensor_previous = sensor_current
         sensor_current = GPIO.input(SENSOR_PORT)
-        print(strftime("%I:%M:%S") + " - GPIO pin %s is %s" % (SENSOR_PORT, sensor_current))
+        #print(strftime("%I:%M:%S") + " - GPIO pin %s is %s" % (SENSOR_PORT, sensor_current))
         if (sensor_current == GPIO.HIGH and sensor_previous == GPIO.LOW):
             scram()
 
