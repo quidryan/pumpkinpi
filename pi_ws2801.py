@@ -12,6 +12,8 @@ from time import sleep
 from time import strftime
 import RPi.GPIO as GPIO
 
+from random import randint
+
 SENSOR_PORT = 18
 
 GPIO.setmode(GPIO.BCM)
@@ -28,6 +30,10 @@ SPI_PORT   = 0
 SPI_DEVICE = 0
 pixels = Adafruit_WS2801.WS2801Pixels(PIXEL_COUNT, spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE), gpio=GPIO)
 
+redRGB = webcolors.name_to_rgb('red')
+orangeRGB = webcolors.name_to_rgb('orange')
+
+
 def flash_face(pixels, lefteye, righteye, mouth, blink_times=20):
     for i in range(blink_times):
         # blink two times, then wait
@@ -39,6 +45,7 @@ def flash_face(pixels, lefteye, righteye, mouth, blink_times=20):
         pixels.show()
         time.sleep(0.5)
 
+
 def speak(pixels, eyes, mouth):
     eyecolor = Adafruit_WS2801.RGB_to_color(eyes[0], eyes[1], eyes[2])
     pixels.set_pixel(pixels.count()-1, eyecolor)
@@ -46,28 +53,35 @@ def speak(pixels, eyes, mouth):
 
     mouthcolor = Adafruit_WS2801.RGB_to_color(mouth[0], mouth[1], mouth[2])
     # Speak
-    
+
+
 def mouth_big(pixels, color):
     lightup(pixels, color, [0, 1, 2, 3, 4, 5, 6, 7, 8])
+
 
 def mouth_normal(pixels, color):
     lightup(pixels, color, [1, 2, 3, 4, 5, 7, 8])
 
+
 def mouth_small(pixels, color):
     lightup(pixels, color, [2, 3, 4, 7, 8])
+
 
 def mouth_tiny(pixels, color):
     lightup(pixels, color, [3, 7, 8])
 
+
 def mouth_none(pixels, color):
     lightup(pixels, color, [7, 8])
+
 
 def lightup(pixels, mouthcolor, mouthpixels):
     pixels.clear()
     for i in mouthpixels:
         pixels.set_pixel(i, mouthcolor)
     pixels.show()
-        
+
+
 def face(pixels, lefteye, righteye, mouth):
     mouthcolor = Adafruit_WS2801.RGB_to_color(mouth[0], mouth[1], mouth[2])
     for i in range(0, pixels.count()-2):
@@ -75,6 +89,7 @@ def face(pixels, lefteye, righteye, mouth):
     pixels.set_pixel(pixels.count()-1, Adafruit_WS2801.RGB_to_color(lefteye[0], lefteye[1], lefteye[2]))
     pixels.set_pixel(pixels.count()-2, Adafruit_WS2801.RGB_to_color(righteye[0], righteye[1], righteye[2]))
     pixels.show()
+
 
 def iterate(pixels):
     colorRGB = webcolors.name_to_rgb('orangered')
@@ -106,13 +121,65 @@ def hey(delay = 0.5):
     mouth_normal(pixels, orange)
     time.sleep(delay * 0.7)
     mouth_small(pixels, orange)
-    time.sleep(delay)
+    time.sleep(delay * 0.8)
     mouth_tiny(pixels, orange)
-    time.sleep(delay)
+    time.sleep(delay * 0.9)
     mouth_none(pixels, orange)
     time.sleep(delay)
 
-orange = webcolors.name_to_rgb('orange')
+
+def peekaboo():
+    os.system('mpg123 -q PeekABoo.mp3 &')
+    hey(0.05)
+    hey(0.1)
+    hey(0.15)
+
+    flash_face(pixels, red, red, red, 5)
+
+
+def imascarypumpkin():
+    os.system('mpg123 -q ImAScaryPumpkin.mp3 &')
+    hey(0.05)
+    hey(0.1)
+    hey(0.15)
+
+    flash_face(pixels, red, red, red, 5)
+
+
+def iwantcandy():
+    os.system('mpg123 -q IWantCandy.mp3 &')
+    hey(0.05)
+    hey(0.1)
+    hey(0.15)
+
+    flash_face(pixels, red, red, red, 5)
+
+
+def ilikeyourcostume():
+    os.system('mpg123 -q ILikeYourCostume.mp3 &')
+    hey(0.05)
+    hey(0.1)
+    hey(0.15)
+
+    flash_face(pixels, red, red, red, 5)
+
+def happyhalloween():
+    os.system('mpg123 -q HappyHalloween.mp3 &')
+    hey(0.05)
+    hey(0.1)
+    hey(0.15)
+
+    flash_face(pixels, red, red, red, 5)
+
+
+def booboo():
+    os.system('mpg123 -q BooBoo-Laurel.mp3 &')
+    hey(0.05)
+    hey(0.1)
+    hey(0.15)
+
+    flash_face(pixels, red, red, red, 5)
+
 
 def scram():
     os.system('mpg123 -q HeyThereScram.mp3 &')
@@ -140,7 +207,16 @@ if __name__ == "__main__":
         sensor_previous = sensor_current
         sensor_current = GPIO.input(SENSOR_PORT)
         print(strftime("%I:%M:%S") + " - GPIO pin %s is %s" % (SENSOR_PORT, sensor_current))
+        faces = {
+            0: scram,
+            1: booboo,
+            2: happyhalloween,
+            3: ilikeyourcostume,
+            4: iwantcandy,
+            5: imascarypumpkin,
+            6: peekaboo
+        }
         if (sensor_current == GPIO.HIGH and sensor_previous == GPIO.LOW):
-            scram()
+            faces[randint(0, 6)]()
 
-        sleep(0.5);
+        sleep(0.5)
