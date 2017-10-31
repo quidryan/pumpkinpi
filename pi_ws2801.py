@@ -189,6 +189,7 @@ def scram():
 
     flash_face(pixels, red, red, red, 5)
 
+
 if __name__ == "__main__":
     # Clear all the pixels to turn them off.
     pixels.clear()
@@ -197,16 +198,16 @@ if __name__ == "__main__":
     orangeRGB = webcolors.name_to_rgb('orange')
     orange = Adafruit_WS2801.RGB_to_color(orangeRGB[0], orangeRGB[1], orangeRGB[2])
 
-    #flash_face(pixels, red, red, orange)
-    #iterate(pixels)
-    #flash_face(pixels, (255, 0, 0), (255, 0, 0), (0, 255, 255))
+    # flash_face(pixels, red, red, orange)
+    # iterate(pixels)
+    # flash_face(pixels, (255, 0, 0), (255, 0, 0), (0, 255, 255))
 
     os.system('mpg123 -q Beep.mp3 &')
 
     while True:
         sensor_previous = sensor_current
         sensor_current = GPIO.input(SENSOR_PORT)
-        print(strftime("%I:%M:%S") + " - GPIO pin %s is %s" % (SENSOR_PORT, sensor_current))
+        # print(strftime("%I:%M:%S") + " - GPIO pin %s is %s" % (SENSOR_PORT, sensor_current))
         faces = {
             0: scram,
             1: booboo,
